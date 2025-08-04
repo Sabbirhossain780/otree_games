@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: otree-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: otree prodserver 8000
+    plan: free
