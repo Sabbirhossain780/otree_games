@@ -1,13 +1,9 @@
-from otree.api import *
-# init_py = ""
-
-# models.py
-# models_py =
+# __init__.py
 from otree.api import *
 
 class C(BaseConstants):
     NAME_IN_URL = 'scto_game'
-    PLAYERS_PER_GROUP = None
+    PLAYERS_PER_GROUP = 1
     NUM_ROUNDS = 1
 
 class Subsession(BaseSubsession):
@@ -23,15 +19,21 @@ class Player(BasePlayer):
     computed_result = models.StringField()
 
 
-# pages.py
-# pages_py =
-# from ._builtin import Page
-# from .models import Player
-
-class Introduction(Page):
+# First page: capture params from GET request
+class GetParams(Page):
     def is_displayed(self):
         return self.round_number == 1
 
+    def before_next_page(self):
+        self.player.name = self.request.GET.get('name', 'Unknown')
+        self.player.age = int(self.request.GET.get('age', 0))
+        self.player.education = self.request.GET.get('education', 'Unknown')
+        # Example computed result: name + double the age
+        self.player.computed_result = f"{self.player.name}_{self.player.age * 2}"
+
+
+# Second page: show data for confirmation
+class Introduction(Page):
     def vars_for_template(self):
         return dict(
             name=self.player.name,
@@ -39,19 +41,16 @@ class Introduction(Page):
             education=self.player.education
         )
 
-    def before_next_page(self):
-        self.player.name = self.request.GET.get('name', 'Unknown')
-        self.player.age = int(self.request.GET.get('age', 0))
-        self.player.education = self.request.GET.get('education', 'Unknown')
-        self.player.computed_result = f"{self.player.name}_{self.player.age * 2}"
 
+# Third page: redirect back to SurveyCTO
 class RedirectBack(Page):
     def is_displayed(self):
         return self.round_number == 1
 
     def app_after_this_page(self, upcoming_apps):
         result = self.player.computed_result
-        return {result}
+        # Replace the link with your actual SurveyCTO return link
+        return f"https://sabbir01.surveycto.com/forms/bgwe_endline/designer.html?view=test&caseid={result}"
 
 
-page_sequence = [Introduction, RedirectBack]
+page_sequence = [GetParams, Introduction, RedirectBack]
