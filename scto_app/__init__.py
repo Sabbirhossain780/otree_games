@@ -51,6 +51,7 @@ class RedirectBack(Page):
 
     def app_after_this_page(self, upcoming_apps):
         result = self.player.computed_result
-        return f"https://sabbir01.surveycto.com/forms/bgwe_endline/designer.html?view=test&caseid={result}"
+        return f"https://sabbir01.surveycto.com/collect/bgwe_endline?result={result}"
+
 
 page_sequence = [Introduction, RedirectBack]
