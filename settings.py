@@ -11,6 +11,12 @@ SESSION_CONFIGS = [
     dict(
         name='survey', app_sequence=['survey', 'payment_info'], num_demo_participants=1
     ),
+    dict(
+        name='scto_app',
+        display_name="SCTO App",
+        app_sequence=['scto_app', 'payment_info'],
+        num_demo_participants=1
+    )
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
@@ -51,6 +57,6 @@ Here are some oTree games.
 """
 
 
-SECRET_KEY = '1257344227235'
+SECRET_KEY = 'pp'
 
 INSTALLED_APPS = ['otree']
